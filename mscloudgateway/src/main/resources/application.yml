@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: mscloudgateway
+
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true # permitindo que o cloud gatewaylocalize os microservicos
+          lower-case-service-id: true # e vou poder localizar eles em caixa baixa
+
+  security: # configuracao do keycloak (além da dependencia no pom)
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK:http://localhost:8085/realms/mscourserealm}
+server:
+  port: 8080 # porta desse ms eh fixa, pois soh haverah uma instancia dele
+
+eureka:
+  client:
+    fetch-registry: true # Esse cliente Eureka busca as informacoes de registro do servidor e as armazenam em cache localmente. Depois disso, o cliente usa essas informacoees para encontrar outros servicos.
+    register-with-eureka: true # and it should register itself as a service with the other Eureka servers
+    service-url:
+      defaultZone: ${DEFAULTZONE:http://cursoms-eureka-user:senha-segura@localhost:8761/eureka}
+

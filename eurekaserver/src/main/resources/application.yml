@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: eureka-server
+
+  security: # configuraçao que abre "fomulario" ao acessar o eureka, devo digitar esse user e essa senha
+    basic:
+      enabled: true
+    user:
+      name: cursoms-eureka-user
+      password: senha-segura
+
+server:
+  port: 8761
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${DEFAULTZONE:http://cursoms-eureka-user:senha-segura@localhost:8761/eureka}
+    register-with-eureka: false
+    fetch-registry: false

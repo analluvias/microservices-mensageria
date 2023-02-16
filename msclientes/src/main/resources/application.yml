@@ -1,0 +1,21 @@
+spring: # configurando o nome do service
+  application:
+    name: msclientes
+
+server: # A PORTA DEFAULT EH A 150, MAS PODEMOS MUDAR PELA IDE OU PELO docker-compose
+  port: ${PORT:8150}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${DEFAULTZONE:http://cursoms-eureka-user:senha-segura@localhost:8761/eureka} # endereço do server eureka
+
+management: # configuracao do actuator - expoe os endpoints
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+logging: # gerando arquivo de log que poderei acessar pelo actuator
+  file:
+    name: ./logs/log-file.log

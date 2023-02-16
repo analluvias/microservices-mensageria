@@ -1,0 +1,78 @@
+version: '3.8'
+
+
+services:
+  cursoms-eureka:
+    image: analluvias/cursoms-eureka:1.0.0
+    ports:
+      - "8761:8761"
+    expose:
+      - 8761
+    networks:
+      - cursoms-network
+    environment:
+      - DEFAULTZONE=http://cursoms-eureka-user:senha-segura@cursoms-eureka:8761/eureka
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  mscloud-gateway:
+    image: analluvias/mscloud-gateway:1.0.0
+    ports:
+      - "8080:8080"
+    expose:
+      - 8080
+    depends_on:
+      - cursoms-eureka
+    environment:
+      - DEFAULTZONE=http://cursoms-eureka-user:senha-segura@cursoms-eureka:8761/eureka
+      - KEYCLOAK=http://cursomskeycloak:8080/realms/mscourserealm
+    networks:
+      - cursoms-network
+
+  ms-cartoes:
+    image: analluvias/cursoms-cartoes:1.0.0
+    ports:
+      - 8300:8300
+    depends_on:
+      - cursoms-eureka
+      - mscloud-gateway
+    environment:
+      - PORT=8300
+      - DEFAULTZONE=http://cursoms-eureka-user:senha-segura@cursoms-eureka:8761/eureka
+      - RABBITHOST=rabbitmq
+    networks:
+      - cursoms-network
+
+
+  ms-clientes:
+    image: analluvias/cursoms-clientes:1.0.0
+    ports:
+      - 8150:8150
+    depends_on:
+      - cursoms-eureka
+      - mscloud-gateway
+    environment:
+      - PORT=8150
+      - DEFAULTZONE=http://cursoms-eureka-user:senha-segura@cursoms-eureka:8761/eureka
+    networks:
+      - cursoms-network
+
+
+  ms-avaliadorcredito:
+    image: analluvias/ms-avaliadorcredito:1.0.0
+    ports:
+      - 8450:8450
+    depends_on:
+      - cursoms-eureka
+      - mscloud-gateway
+    environment:
+      - PORT=8450
+      - RABBITHOST=rabbitmq
+      - DEFAULTZONE=http://cursoms-eureka-user:senha-segura@cursoms-eureka:8761/eureka
+    networks:
+      - cursoms-network
+
+networks:
+ cursoms-network:
+   name: network-ms-cartoes
+   external: true

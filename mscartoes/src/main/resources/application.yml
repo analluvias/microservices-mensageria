@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: mscartoes # nome do microsservice
+
+  rabbitmq: # configurando a porta e o acesso ao rabbitmq
+    host: ${RABBITHOST:localhost}
+    port: 5672
+    username: guest
+    password: guest
+
+server:
+  port: ${PORT:8300}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${DEFAULTZONE:http://cursoms-eureka-user:senha-segura@localhost:8761/eureka}
+      #defaultZone: http://cursoms-eureka-user:senha-segura@cursoms-eureka:8761/eureka
+
+mq:
+  queues:
+    emissao-cartoes: emissao-cartoes
+
+management: # configuracao do actuator - expoe os endpoints
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+logging: # gerando arquivo de log que poderei acessar pelo actuator
+  file:
+    name: ./logs/log-file.log

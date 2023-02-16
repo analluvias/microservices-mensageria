@@ -1,0 +1,31 @@
+spring: # configurando o nome do service
+  application:
+    name: msavaliadorcredito
+
+  rabbitmq: # onde esta o meu rabbitmq
+    host: ${RABBITHOST:localhost}
+    port: 5672
+    username: guest
+    password: guest
+
+server: # porta randomica -> pois terao varios clientes e cada um tera uma porta
+  port: ${PORT:8450}
+
+eureka: # endereco do server eureka
+  client:
+    service-url:
+      defaultZone: ${DEFAULTZONE:http://cursoms-eureka-user:senha-segura@localhost:8761/eureka}
+
+mq: # colocando o nome da fila para o qual esse ms vai enviar as mensagens
+  queues:
+    emissao-cartoes: emissao-cartoes
+
+#management: # configuracao do actuator - expoe os endpoints
+#  endpoints:
+#    web:
+#      exposure:
+#        include: '*'
+#
+#logging: # gerando arquivo de log que poderei acessar pelo actuator
+#  file:
+#    name: ./logs/log-file.log
